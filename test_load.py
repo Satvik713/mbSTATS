@@ -56,16 +56,16 @@ try:
     print(p_values_df)
     plot_p_values(p_values_df, th=0.1)
 
-    print("TSN Normalized DataFrame:", tsn_normalized_df)
-    print("MN Normalized DataFrame:", mn_normalized_df)
-    print("CODA Normalized DataFrame:", coda_normalized_df)
-    print("PQN Normalized DataFrame:", pqn_normalized_df)
+    # print("TSN Normalized DataFrame:", tsn_normalized_df)
+    # print("MN Normalized DataFrame:", mn_normalized_df)
+    # print("CODA Normalized DataFrame:", coda_normalized_df)
+    # print("PQN Normalized DataFrame:", pqn_normalized_df)
 
     pca_results = perform_pca(tsn_normalized_df)  # PCA analysis and plot with sample names
     perform_hca(tsn_normalized_df)                # HCA dendrogram plot
     corr_matrix = plot_correlation_matrix_samples(tsn_normalized_df)  # Correlation matrix heatmap
 
-    converted_df = convert(coda_normalized_df)
+    converted_df = convert(tsn_normalized_df)
     print("converted dataframe: ", converted_df)
 
     plot_hca(converted_df)
@@ -77,9 +77,9 @@ try:
     investigate(tsn_normalized_df, 5)
     rf_features(tsn_normalized_df)
     generate_heatmap(tsn_normalized_df)
-    plot_violin(tsn_normalized_df, ['c1', 'c2', 'c3'])
-    plot_grp_avg(tsn_normalized_df, ['c1', 'c2', 'c3'])
-    plot_density(tsn_normalized_df, ['c1', 'c2', 'c3'])
+    plot_violin(tsn_normalized_df, ['c1', 'c2', 'c3', 'c4'])
+    plot_grp_avg(tsn_normalized_df, ['c1', 'c2', 'c6', 'c9'])
+    plot_density(tsn_normalized_df, ['c1', 'c2', 'c3', 'c6'])
     
 except (FileNotFoundError, ValueError) as e:
     print(f"Error: {e}")

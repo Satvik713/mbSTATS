@@ -15,7 +15,16 @@ You can install the latest release of `mbSTATS` from PyPI:
 
 ```bash
 pip install mbSTATS 
+```
+
+To install in a Notebook:
+```bash 
+!pip install mbSTATS 
+```
 
 Alternatively, if you want to install directly from the GitHub repository:
 
+```bash
 pip install git+https://github.com/Satvik713/mbSTATS.git
+```
+
