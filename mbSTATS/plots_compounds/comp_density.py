@@ -1,28 +1,50 @@
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os
 
-def plot_density(df, compounds):
+def plot_density(df, code_to_compound, output):
     """
-    Plots the density of selected compound intensities across samples.
-    
+    Plots the density of compound intensities across samples.
+
     Parameters:
         df (DataFrame): DataFrame containing the sample intensities.
-        compounds (list): List of compound codes to include in the density plot.
-    
-    Returns:
-        None: Displays the density plot.
-    """
-    # Melt the data to plot density for each compound across samples
-    melted_df = df.melt(id_vars='sample', value_vars=compounds, var_name='Compound', value_name='Intensity')
-    
-    # Create the density plot
-    plt.figure(figsize=(10, 6))
-    sns.kdeplot(data=melted_df, x='Intensity', hue='Compound', fill=True, common_norm=False, palette='muted')
-    plt.title('Density Plot of Selected Compound Intensities')
-    plt.xlabel('Intensity')
-    plt.ylabel('Density')
-    plt.tight_layout()
-    plt.show()
+        code_to_compound (dict): Dictionary mapping compound codes to compound names.
+        output (str): Directory where plots will be saved.
 
-# Example usage:
-# plot_density(coda_df, ['c1', 'c8', 'c6', 'c3'])
+    Returns:
+        None: Saves the density plots as files.
+    """
+    # Identify compound columns
+    compound_codes = [col for col in df.columns if col not in ['sample', 'Group']]
+    
+    # Map compound codes to names
+    compound_names = {code: code_to_compound.get(code, code) for code in compound_codes}
+    
+    # Melt the DataFrame for plotting
+    melted_df = df.melt(id_vars='sample', value_vars=compound_codes, 
+                        var_name='Compound', value_name='Intensity')
+    
+    # Map compound codes to names in the melted DataFrame
+    melted_df['Compound'] = melted_df['Compound'].map(compound_names)
+    
+    # Split compounds into chunks of 5
+    unique_compounds = melted_df['Compound'].unique()
+    compound_chunks = [unique_compounds[i:i + 5] for i in range(0, len(unique_compounds), 5)]
+    
+    # Generate density plots for each chunk
+    for idx, compounds in enumerate(compound_chunks):
+        plt.figure(figsize=(10, 6))
+        sns.kdeplot(data=melted_df[melted_df['Compound'].isin(compounds)], 
+                    x='Intensity', hue='Compound', fill=True, 
+                    common_norm=False, palette='muted')
+        
+        plt.title(f'Density Plot of Compound Intensities (Compounds {idx * 5 + 1} to {idx * 5 + len(compounds)})')
+        plt.xlabel('Intensity')
+        plt.ylabel('Density')
+        plt.tight_layout()
+        
+        # Save plot
+        output_file = os.path.join(output, f'density_plot_{idx + 1}.png')
+        plt.savefig(output_file, dpi=300, bbox_inches="tight")
+        plt.close()
+        print(f"Plot saved to {output_file}")

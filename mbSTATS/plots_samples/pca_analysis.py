@@ -3,8 +3,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+import os
 
-def perform_pca(data):
+def perform_pca(data, output):
     """
     Perform PCA on the given data and plot the results with sample labels.
     
@@ -43,6 +44,9 @@ def perform_pca(data):
     plt.xlabel("Principal Component 1")
     plt.ylabel("Principal Component 2")
     plt.legend(title="Sample Type", bbox_to_anchor=(1, 1))
-    plt.show()
+    output_file = os.path.join(output, "pca_samples.png")
+    plt.savefig(output_file, dpi=300, bbox_inches="tight")
+    print(f"Plot saved to {output_file}")
+    # plt.show()
     
     return pca_df

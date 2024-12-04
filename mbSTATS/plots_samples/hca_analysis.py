@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.preprocessing import StandardScaler
+import os 
 
-def perform_hca(data):
+def perform_hca(data, output):
     """
     Perform hierarchical clustering on the given data and plot a dendrogram.
     
@@ -26,4 +27,7 @@ def perform_hca(data):
     plt.title("Hierarchical Clustering Dendrogram")
     plt.xlabel("Sample")
     plt.ylabel("Distance")
-    plt.show()
+    output_file = os.path.join(output, "hca_samples.png")
+    plt.savefig(output_file, dpi=300, bbox_inches="tight")
+    print(f"Plot saved to {output_file}")
+    # plt.show()
