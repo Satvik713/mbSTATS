@@ -28,3 +28,7 @@ Alternatively, if you want to install directly from the GitHub repository:
 pip install git+https://github.com/Satvik713/mbSTATS.git
 ```
 
+To directly get the plots for your data (after pip install run): 
+```bash
+mbstats-cli -f /path/to/wt /path/to/oe1 /path/to/oe2 -o /path/to/output
+```

@@ -5,22 +5,17 @@ from mbSTATS.final_df_prep import create_summary_dataframe
 from mbSTATS.normalization_methods.pqn_normalization import pqn_normalization
 from mbSTATS.plots_samples.pca_analysis import perform_pca
 from mbSTATS.plots_samples.hca_analysis import perform_hca
-from mbSTATS.plots_samples.correlation_analysis import plot_correlation_matrix_compounds
-from mbSTATS.plots_samples.pls_da import pls_da_samples
+from mbSTATS.plots_samples.correlation_analysis import plot_correlation_matrix_samples
+from mbSTATS.plots_samples.pls_da import pls_da_plot
 from mbSTATS.plots_compounds.hca_analysis import plot_hca
 from mbSTATS.plots_compounds.pca_analysis import plot_pca
 from mbSTATS.plots_compounds.correlation_matrix import plot_correlation_matrix
-from mbSTATS.plots_samples.plot_vip_score import plot_vip_scores
 from mbSTATS.plots_compounds.volcano import plot_volcano
 from mbSTATS.plots_compounds.rf_feature_imp import rf_features
 from mbSTATS.plots_compounds.heatmap_comp_v_samp import generate_heatmap
-from mbSTATS.plots_compounds.pls_da_comps import perform_pls_da_and_plot
 from mbSTATS.plots_compounds.violin_plot import plot_violin
 from mbSTATS.plots_compounds.grp_avg import plot_grp_avg
 from mbSTATS.plots_compounds.comp_density import plot_density
-from mbSTATS.df_convert import convert
-from mbSTATS.pval_calculation import calculate_p_values
-from mbSTATS.pval_plot import plot_p_values
 
 def main():
     # Set up argument parsing
@@ -42,8 +37,6 @@ def main():
     
     # Create summary dataframe
     summary_df, compound_to_code = create_summary_dataframe(dataframes)
-    code_to_compound = {value: key for key, value in compound_to_code.items()}
-
     print("Summary DataFrame:")
     print(summary_df)
     
@@ -54,32 +47,24 @@ def main():
     pqn_normalized_df = pqn_normalization(summary_df)
     print("Normalization complete.")
 
-    converted_df = convert(pqn_normalized_df)
-
-    p_values_df = calculate_p_values(pqn_normalized_df)
-    # print(p_values_df)
-    plot_p_values(p_values_df, code_to_compound, args.output, th=0.1)
-
     # Perform PCA and save the plot
     perform_pca(pqn_normalized_df, args.output)
 
     # Perform other analyses and save plots
     perform_hca(pqn_normalized_df, args.output)
-    plot_correlation_matrix_compounds(pqn_normalized_df, code_to_compound, args.output)
-    pls_da_samples(pqn_normalized_df, args.output, code_to_compound)
+    plot_correlation_matrix_samples(pqn_normalized_df, args.output)
+    pls_da_plot(pqn_normalized_df, args.output)
     
     # Compound level analyses
-    plot_hca(converted_df, args.output, code_to_compound)
-    plot_pca(converted_df, code_to_compound, args.output)
-    plot_correlation_matrix(converted_df, args.output)
-    perform_pls_da_and_plot(converted_df, code_to_compound, args.output)
-    vip_scores, feature_names = pls_da_samples(pqn_normalized_df, args.output, code_to_compound)
-    plot_vip_scores(vip_scores, feature_names, args.output)
-    # rf_features(summary_df, args.output)
-    # generate_heatmap(summary_df, args.output)
-    plot_violin(pqn_normalized_df, code_to_compound, args.output)
-    plot_grp_avg(pqn_normalized_df, code_to_compound, args.output)
-    plot_density(pqn_normalized_df, code_to_compound, args.output)
+    plot_hca(summary_df, args.output)
+    plot_pca(summary_df, args.output)
+    plot_correlation_matrix(summary_df, args.output)
+    plot_volcano(summary_df, args.output)
+    rf_features(summary_df, args.output)
+    generate_heatmap(summary_df, args.output)
+    plot_violin(summary_df, args.output)
+    plot_grp_avg(summary_df, args.output)
+    plot_density(summary_df, args.output)
 
     print(f"Analysis complete. Plots saved in {args.output}")
 
