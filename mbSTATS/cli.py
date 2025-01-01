@@ -23,15 +23,10 @@ from mbSTATS.pval_calculation import calculate_p_values
 from mbSTATS.pval_plot import plot_p_values
 
 def main():
-    # Set up argument parsing
     parser = argparse.ArgumentParser(description="Run metabolomics analysis with mbSTATS")
     parser.add_argument('-f', '--folders', type=str, nargs='+', required=True, help="Folders containing data")
     parser.add_argument('-o', '--output', type=str, required=True, help="Folder to save the output plots")
-    
-    # Parse arguments
     args = parser.parse_args()
-
-    # Prepare data by loading CSV files
     column_names = ["Start_Time", "End_Time", "Retention_Time", "Ion_Mode", 
                     "Intensity", "Area_Percentage", "Adjusted_Intensity", 
                     "Adjusted_Area_Percentage", "Peak_Width", "Flag", 
@@ -39,44 +34,30 @@ def main():
     
     dataframes = load_csv_data(args.folders, column_names)
     print("Dataframes loaded:", list(dataframes.keys()))
-    
-    # Create summary dataframe
     summary_df, compound_to_code = create_summary_dataframe(dataframes)
     code_to_compound = {value: key for key, value in compound_to_code.items()}
 
     print("Summary DataFrame:")
     print(summary_df)
-    
     print("Compounds to code:")
     print(compound_to_code)
-    
-    # Perform normalization
     pqn_normalized_df = pqn_normalization(summary_df)
     print("Normalization complete.")
-
     converted_df = convert(pqn_normalized_df)
-
     p_values_df = calculate_p_values(pqn_normalized_df)
-    # print(p_values_df)
     plot_p_values(p_values_df, code_to_compound, args.output, th=0.1)
-
-    # Perform PCA and save the plot
     perform_pca(pqn_normalized_df, args.output)
 
-    # Perform other analyses and save plots
     perform_hca(pqn_normalized_df, args.output)
     plot_correlation_matrix_compounds(pqn_normalized_df, code_to_compound, args.output)
     pls_da_samples(pqn_normalized_df, args.output, code_to_compound)
     
-    # Compound level analyses
     plot_hca(converted_df, args.output, code_to_compound)
     plot_pca(converted_df, code_to_compound, args.output)
     plot_correlation_matrix(converted_df, args.output)
     perform_pls_da_and_plot(converted_df, code_to_compound, args.output)
     vip_scores, feature_names = pls_da_samples(pqn_normalized_df, args.output, code_to_compound)
     plot_vip_scores(vip_scores, feature_names, args.output)
-    # rf_features(summary_df, args.output)
-    # generate_heatmap(summary_df, args.output)
     plot_violin(pqn_normalized_df, code_to_compound, args.output)
     plot_grp_avg(pqn_normalized_df, code_to_compound, args.output)
     plot_density(pqn_normalized_df, code_to_compound, args.output)

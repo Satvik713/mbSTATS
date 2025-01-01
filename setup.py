@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="mbSTATS",
-    version="0.0.2",  # Ensure this is set to 0.1.0
+    version="0.0.2",  
     author="Satvik",
     author_email="f20213047@goa.bits-pilani.ac.in",
     description="A library for statistical analysis of metabolomics data",
@@ -18,7 +18,7 @@ setup(
     python_requires=">=3.7",
     entry_points={
         'console_scripts': [
-            'mbstats-cli=mbSTATS.cli:main',  # CLI command
+            'mbstats-cli=mbSTATS.cli:main',  
         ],
     },
 )

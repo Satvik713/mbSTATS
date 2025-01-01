@@ -20,26 +20,17 @@ def rf_features(df, target_column='sample', n_estimators=100, random_state=42):
     Returns:
         importance_df (DataFrame): DataFrame with compounds and their corresponding importance scores.
     """
-    # Separate features (compounds) and target (sample labels)
-    X = df.drop(columns=[target_column])  # Features: compound intensities
-    y = LabelEncoder().fit_transform(df[target_column])  # Target: Sample groups (encoded)
     
-    # Initialize the Random Forest model
+    X = df.drop(columns=[target_column]) 
+    y = LabelEncoder().fit_transform(df[target_column]) 
     rf_model = RandomForestClassifier(n_estimators=n_estimators, random_state=random_state)
-    
-    # Fit the model to the data
     rf_model.fit(X, y)
-    
-    # Get the feature importances from the model
     feature_importances = rf_model.feature_importances_
-    
-    # Create a DataFrame to display feature importances with compound names
     importance_df = pd.DataFrame({
         'Compound': X.columns,
         'Importance': feature_importances
     }).sort_values(by='Importance', ascending=False)
     
-    # Plot the feature importances
     plt.figure(figsize=(10, 6))
     sns.barplot(x='Importance', y='Compound', data=importance_df, palette='viridis')
     plt.title('Random Forest Feature Importance')
@@ -49,7 +40,3 @@ def rf_features(df, target_column='sample', n_estimators=100, random_state=42):
     plt.show()
     
     return importance_df
-
-# Example usage:
-# importance_df = perform_random_forest_feature_importance(coda_df, target_column='sample')
-# print(importance_df)

@@ -19,27 +19,21 @@ def load_csv_data(folders, column_names, required_columns=["Compound_Name", "Are
     """
     dataframes = {}
 
-    # Define regex to capture the relevant parts of the filenames
     pattern = re.compile(r".*/(wt|oe|oe2)/(\w+_\d).csv")
 
     for folder in folders:
         csv_files = glob.glob(f"{folder}/*.csv")
         
-        # Check if the folder is empty
         if not csv_files:
             raise FileNotFoundError(f"No CSV files found in folder: {folder}")
 
         for file in csv_files:
             match = pattern.match(file)
             if match:
-                # Extract parts from the filename to create the key
                 group, sample = match.groups()
-                df_name = f"{group}_{sample}"  # e.g., "wt_wt1_1" -> "wt1_1"
-                
-                # Read the CSV file and assign column names
+                df_name = f"{group}_{sample}"  
                 df = pd.read_csv(file, names=column_names, header=0)
 
-                # Check if required columns are present
                 missing_columns = [col for col in required_columns if col not in df.columns]
                 if missing_columns:
                     raise ValueError(f"File {file} is missing required columns: {', '.join(missing_columns)}")
@@ -50,7 +44,6 @@ def load_csv_data(folders, column_names, required_columns=["Compound_Name", "Are
 
     return dataframes
 
-# Example usage
 folders = ["/home/satvik/Thesis/csv/wt", "/home/satvik/Thesis/csv/oe", "/home/satvik/Thesis/csv/oe2"]
 column_names = [
     "Start_Time", "End_Time", "Retention_Time", "Ion_Mode", 
@@ -61,6 +54,5 @@ column_names = [
 
 try:
     dataframes = load_csv_data(folders, column_names)
-    # Access specific dataframes by name as before
 except (FileNotFoundError, ValueError) as e:
     print(f"Error: {e}")

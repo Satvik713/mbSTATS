@@ -13,10 +13,7 @@ def generate_heatmap(df, target_column='sample'):
     Returns:
         None: Displays the heatmap.
     """
-    # Drop the 'sample' and 'Group' columns and set 'sample' as the index
     heatmap_df = df.drop(columns=[target_column]).set_index(df[target_column])
-    
-    # Plot the heatmap
     plt.figure(figsize=(10, 6))
     sns.heatmap(heatmap_df.T, cmap="viridis", cbar_kws={'label': 'Intensity'}, annot=True, fmt=".2f")
     plt.xlabel('Samples')

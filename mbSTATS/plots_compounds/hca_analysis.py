@@ -34,39 +34,14 @@ def plot_hca(data, output, code_to_compound):
         color_threshold=0.5  
     )
 
-    # Plot title and labels
     plt.title('Hierarchical Cluster Analysis Dendrogram', fontsize=16)
     plt.xlabel('Compounds', fontsize=14)
     plt.ylabel('Distance', fontsize=14)
-    plt.xticks(fontsize=6, rotation=55)  # Rotate x labels for better readability
+    plt.xticks(fontsize=6, rotation=55)  
     plt.yticks(fontsize=12)
     plt.tight_layout()
     output_file = os.path.join(output, "hca_compounds.png")
     plt.savefig(output_file, dpi=300, bbox_inches="tight")
     print(f"Plot saved to {output_file}")
     # save_plot(plt, save_path)
-
-    # Display plot
     # plt.show()
-
-
-# def plot_hca(df):
-#     """
-#     This function performs Hierarchical Clustering Analysis (HCA) on the provided DataFrame and plots the dendrogram.
-    
-#     Parameters:
-#     df (pd.DataFrame): The input DataFrame containing compounds as rows and samples as columns.
-#     """
-#     # Drop 'Compounds' column for clustering
-#     data_for_clustering = df.drop(columns=["Compounds"])
-    
-#     # Perform Hierarchical Clustering
-#     linked = linkage(data_for_clustering, method='ward')
-    
-#     # Create a dendrogram
-#     plt.figure(figsize=(10, 7))
-#     dendrogram(linked, labels=df['Compounds'].values, orientation='top', distance_sort='descending', show_leaf_counts=True)
-#     plt.title('Hierarchical Cluster Analysis Dendrogram')
-#     plt.xlabel('Compounds')
-#     plt.ylabel('Distance')
-#     plt.show()

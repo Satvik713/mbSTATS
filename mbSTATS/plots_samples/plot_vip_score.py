@@ -14,21 +14,16 @@ def plot_vip_scores(vip_scores, feature_names, output):
     Returns:
     - None
     """
-    # Check if VIP scores and feature names have the same length
+    
     if len(vip_scores) != len(feature_names):
         print("Error: Length of VIP scores and feature names must be the same.")
         return
 
-    # Sort the VIP scores and feature names by VIP score values in descending order
     sorted_idx = np.argsort(vip_scores)[::-1]
     vip_scores_sorted = vip_scores[sorted_idx]
     feature_names_sorted = [feature_names[i] for i in sorted_idx]
-
-    # Create the VIP score bar plot
     plt.figure(figsize=(12, 8))
     plt.barh(feature_names_sorted, vip_scores_sorted, color='lightblue')
-
-    # Plot settings
     plt.xlabel('VIP Score')
     plt.title('VIP Scores Plot')
     plt.grid(True)

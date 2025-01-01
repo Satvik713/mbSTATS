@@ -14,24 +14,15 @@ def plot_density(df, code_to_compound, output):
     Returns:
         None: Saves the density plots as files.
     """
-    # Identify compound columns
     compound_codes = [col for col in df.columns if col not in ['sample', 'Group']]
-    
-    # Map compound codes to names
     compound_names = {code: code_to_compound.get(code, code) for code in compound_codes}
-    
-    # Melt the DataFrame for plotting
     melted_df = df.melt(id_vars='sample', value_vars=compound_codes, 
                         var_name='Compound', value_name='Intensity')
     
-    # Map compound codes to names in the melted DataFrame
     melted_df['Compound'] = melted_df['Compound'].map(compound_names)
-    
-    # Split compounds into chunks of 5
     unique_compounds = melted_df['Compound'].unique()
     compound_chunks = [unique_compounds[i:i + 5] for i in range(0, len(unique_compounds), 5)]
     
-    # Generate density plots for each chunk
     for idx, compounds in enumerate(compound_chunks):
         plt.figure(figsize=(10, 6))
         sns.kdeplot(data=melted_df[melted_df['Compound'].isin(compounds)], 
@@ -42,8 +33,6 @@ def plot_density(df, code_to_compound, output):
         plt.xlabel('Intensity')
         plt.ylabel('Density')
         plt.tight_layout()
-        
-        # Save plot
         output_file = os.path.join(output, f'density_plot_{idx + 1}.png')
         plt.savefig(output_file, dpi=300, bbox_inches="tight")
         plt.close()

@@ -12,30 +12,18 @@ def plot_pca(df, code_to_compound, output):
     df (pd.DataFrame): The input DataFrame containing compounds as rows and samples as columns.
     code_to_compound (dict): A dictionary mapping compound codes to compound names.
     """
-    # Drop 'Compounds' column for PCA
     X = df.drop(columns=['Compounds'])
     X_std = StandardScaler().fit_transform(X)
-
-    # Perform PCA
     pca = PCA(n_components=2)
     pca_components = pca.fit_transform(X_std)
-
-    # Create a DataFrame for PCA results
     pca_df = pd.DataFrame(pca_components, columns=['PC1', 'PC2'])
     pca_df['Compound'] = df['Compounds']
-
-    # Map compound codes to names
     pca_df['Compound_Name'] = pca_df['Compound'].map(code_to_compound)
-
-    # Plot the PCA results with compound names
     plt.figure(figsize=(10, 8))
     plt.scatter(pca_df['PC1'], pca_df['PC2'], color='b', s=100)
 
-    # Annotate each point with the compound name
     for i in range(pca_df.shape[0]):
         plt.text(pca_df['PC1'][i] + 0.05, pca_df['PC2'][i], pca_df['Compound_Name'][i], fontsize=6)
-
-    # Plot settings
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
     plt.title('PCA Plot of Compounds')

@@ -32,21 +32,14 @@ column_names = [
 ]
 
 try:
-    # Load the dataframes using the load_csv_data function
     dataframes = load_csv_data(folders, column_names)
-    print("Dataframes loaded:", list(dataframes.keys()))  # This should show loaded dataframe names
-    
-    # Now, test the create_summary_dataframe function using the loaded dataframes
+    print("Dataframes loaded:", list(dataframes.keys())) 
     summary_df, compound_to_code = create_summary_dataframe(dataframes)
-    
-    # Print the summary dataframe to check the results
     print("Summary DataFrame:")
     print(summary_df)
-
     print("Compounds to code:")
     print(compound_to_code)
 
-    # Example usage with a DataFrame, `df`:
     tsn_normalized_df = tsn_normalization(summary_df)
     mn_normalized_df = mn_normalization(summary_df)
     coda_normalized_df = coda_normalization(summary_df)
@@ -61,9 +54,9 @@ try:
     # print("CODA Normalized DataFrame:", coda_normalized_df)
     # print("PQN Normalized DataFrame:", pqn_normalized_df)
 
-    pca_results = perform_pca(tsn_normalized_df)  # PCA analysis and plot with sample names
-    perform_hca(tsn_normalized_df)                # HCA dendrogram plot
-    corr_matrix = plot_correlation_matrix_samples(tsn_normalized_df)  # Correlation matrix heatmap
+    pca_results = perform_pca(tsn_normalized_df)  
+    perform_hca(tsn_normalized_df)               
+    corr_matrix = plot_correlation_matrix_samples(tsn_normalized_df)  # 
 
     converted_df = convert(tsn_normalized_df)
     print("converted dataframe: ", converted_df)
